@@ -1,0 +1,32 @@
+name: Build and Run Clippy
+
+on:
+  workflow_dispatch: 
+
+jobs:
+  build-and-clippy:
+    runs-on: arc-runner-set
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential
+
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Run build
+        run: cargo build --release
+
+      - name: Artificial delay
+        run: |
+          echo "Adding artificial delay to simulate longer workflow..."
+          sleep 180 
+
+      - name: Run Clippy
+        run: cargo clippy -- -D warnings
